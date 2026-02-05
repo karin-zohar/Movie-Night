@@ -1,0 +1,6 @@
+.movie-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+}

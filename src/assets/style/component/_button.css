@@ -1,11 +1,12 @@
 button.ant-btn {
-  &.woodle-button {
+  &.custom-button {
     font-family: Roboto, Arial;
     background-color: light-dark(var(--red-200), var(--red-600));
     color: light-dark(var(--gray-1000), var(--white-100));
 
     &.ant-btn-variant-outlined.ant-btn-color-default {
       border: 2px solid light-dark(var(--gray-1000), var(--white-100));
+
       &:active,
       &:hover {
         background-color: light-dark(var(--gray-1000), var(--white-100));
@@ -17,6 +18,7 @@ button.ant-btn {
     &.ant-btn-variant-solid {
       background-color: light-dark(var(--red-200), var(--red-600));
       color: light-dark(var(--gray-1000), var(--white-100));
+
       &:hover {
         transition: 0.4s;
         background-color: var(--red-300);
@@ -26,6 +28,7 @@ button.ant-btn {
     &.ant-btn-color-dangerous {
       background-color: var(--red-700);
       color: var(--white-100);
+
       &:active,
       &:hover {
         transition: 0.5s;

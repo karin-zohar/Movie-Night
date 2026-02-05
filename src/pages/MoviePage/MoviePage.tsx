@@ -2,6 +2,9 @@ import type { Movie } from "@/types/movie";
 import { useMemo, type FC } from "react";
 import { useParams } from "react-router";
 import MovieDetails from "./components/MovieDetails/MovieDetails";
+import MovieActions from "./components/MovieActions/MovieActions";
+import { Flex } from "antd";
+import './movie-page.style.css';
 
 type MoviePageProps = {
 
@@ -25,9 +28,13 @@ const MoviePage: FC<MoviePageProps> = ({ }) => {
     }, [movieId]);
 
     return (
-        <div>
-           <MovieDetails movie={movie} />
-        </div>
+        <Flex className="movie-page">
+            <MovieDetails movie={movie} />
+            <MovieActions onSaveAsFavorite={() => {
+                // TODO: implement save as favorite logic
+                console.log("Saved as favorite:", movie?.id);
+            }} />
+        </Flex>
     );
 };
 
