@@ -21,6 +21,7 @@ html {
 
   font-size: 16px;
   scrollbar-width: none;
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -51,12 +52,14 @@ html {
 
 body {
   margin: 0;
+
   button span {
     font-family: inherit;
   }
 
   a {
     color: inherit;
+
     &:hover {
       color: var(--accent);
     }
@@ -79,6 +82,7 @@ body {
   .ant-modal .ant-modal-container {
     background-color: transparent;
     box-shadow: none;
+
     .ant-modal-close {
       display: none;
     }

@@ -1,7 +1,6 @@
 :root {
   /* Sizes */
   --header-height: 62px;
-  --max-content-width: 400px;
 
   /* Colors */
   --white-0: #fff;
@@ -23,13 +22,7 @@
   --red-700: #661314;
   --red-800: #3d1511;
   --red-900: #14170c;
-  
+
   /* Styles */
   --box-shadow: 5px 5px 9px 1px var(--shadow);
-}
-
-@media (min-width: 700px) {
-  :root {
-    --max-content-width: 700px;
-  }
 }
