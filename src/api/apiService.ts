@@ -23,12 +23,13 @@ export async function apiRequest<TResponse = unknown>(
 
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(`API ${response.status}: ${text}`);
+    const error = new Error(text);
+    (error as Error & { status: number }).status = response.status;
+    throw error;
   }
   try {
     return (await response.json()) as TResponse;
   } catch (error) {
-    console.error("API request failed:", error);
-    return {} as TResponse;
+    throw new Error(`Failed to parse JSON from ${method} ${baseUrl}${path}: ${error}`);
   }
 }
