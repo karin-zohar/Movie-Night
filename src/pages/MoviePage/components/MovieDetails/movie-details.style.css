@@ -1,0 +1,28 @@
+.movie-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 32px;
+}
+
+.movie-details-image-wrapper {
+  max-width: 600px;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.movie-details-image-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.movie-details-text-wrapper {
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
