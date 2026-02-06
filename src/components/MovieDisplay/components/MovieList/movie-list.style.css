@@ -1,4 +1,5 @@
 .movie-list {
+    padding-inline: 12px;
     display: grid;
     justify-content: center;
     gap: 20px;
