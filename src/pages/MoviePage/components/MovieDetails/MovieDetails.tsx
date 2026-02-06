@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import type { Movie } from "../../../../types/movie";
+import type { Movie } from "@/types/movie";
 import { Typography } from "antd";
 import './movie-details.style.css';
 
