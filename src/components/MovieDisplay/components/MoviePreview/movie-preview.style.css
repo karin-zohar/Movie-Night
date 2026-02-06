@@ -10,11 +10,19 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
-    transition: transform 0.2s, border-color 0.2s;
+    transition: 0.2s;
 
     &:hover {
         transform: translateY(-2px) scale(1.04);
         border-color: var(--blue-400);
+
+        .movie-preview-text-wrapper {
+            height: 140px;
+        }
+
+        h3.ant-typography {
+            color: var(--blue-400);
+        }
     }
 
     .movie-preview-image-wrapper {
@@ -34,17 +42,14 @@
         display: flex;
         flex-direction: column;
         flex-shrink: 0;
+        transition: height 0.3s;
 
         .movie-preview-description {
             max-height: 100%;
             overflow: hidden;
-            text-overflow: ellipsis;
-            line-clamp: 2;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            box-orient: vertical;
-            display: -webkit-box;
             color: var(--gray-500);
+            mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
         }
     }
 }
