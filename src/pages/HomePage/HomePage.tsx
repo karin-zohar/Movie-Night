@@ -1,6 +1,7 @@
 import MovieDisplay from "@/components/MovieDisplay/MovieDisplay";
 import { Typography } from "antd";
 import './home-page.style.css';
+
 const staticMovies = Array.from({ length: 20 }, (_, index) => ({
   id: index.toString(),
   title: `The Dark Knight`,

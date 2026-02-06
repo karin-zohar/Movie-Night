@@ -1,7 +1,8 @@
 .movie-actions {
+  border-radius: 4px;
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 12px;
   padding: 16px 32px;
 }
-
