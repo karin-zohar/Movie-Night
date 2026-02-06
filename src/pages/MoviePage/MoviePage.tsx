@@ -1,22 +1,32 @@
-import type { Movie } from "@/types/movie";
+import { useEffect, useState } from "react";
+import type { Movie, TMDBMovieResponse } from "@/types/movie";
 import { useParams } from "react-router";
 import MovieDetails from "./components/MovieDetails/MovieDetails";
 import MovieActions from "./components/MovieActions/MovieActions";
 import { Flex } from "antd";
+import { TMDBClient } from "@/api/TMDB.client";
 import './movie-page.style.css';
+
+const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 const MoviePage = () => {
     const { id: movieId } = useParams();
+    const [movie, setMovie] = useState<Movie | null>(null);
 
-    // TODO: GET movie from API / Local storage
-    const movie: Movie | null = movieId
-        ? {
-            id: movieId,
-            title: "The Dark Knight",
-            description: "A movie about a dark knight",
-            imageUrl: "https://plus.unsplash.com/premium_photo-1710409625244-e9ed7e98f67b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        }
-        : null;
+    useEffect(() => {
+        if (!movieId) return;
+
+        TMDBClient.get<TMDBMovieResponse>(`/movie/${movieId}`).then((data) => {
+            setMovie({
+                id: String(data.id),
+                title: data.title,
+                description: data.overview,
+                imageUrl: data.poster_path
+                    ? `${TMDB_IMAGE_BASE_URL}${data.poster_path}`
+                    : "",
+            });
+        });
+    }, [movieId]);
 
     return (
         <Flex className="movie-page">
