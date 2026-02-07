@@ -4,6 +4,7 @@ import NavContent from "./NavContent";
 import GenCloseButton from "@/libs/ui/components/GenCloseButton/GenCloseButton";
 import clsx from "clsx";
 import { MenuIcon } from "@/libs/ui/icons/index";
+import { useTheme } from "@/store";
 
 type NavDrawerProps = {
   open: boolean;
@@ -12,6 +13,8 @@ type NavDrawerProps = {
 };
 
 const NavDrawer: FC<NavDrawerProps> = ({ open, onOpen, onClose }) => {
+  const { theme } = useTheme();
+
   return (
     <>
       <div className="open-nav-drawer-button-container">
@@ -26,6 +29,7 @@ const NavDrawer: FC<NavDrawerProps> = ({ open, onOpen, onClose }) => {
       </div>
       <Drawer
         className={clsx("nav-drawer")}
+        rootClassName={clsx("theme", theme)}
         open={open}
         onClose={onClose}
         closeIcon={<GenCloseButton onClose={onClose} size="large" />}

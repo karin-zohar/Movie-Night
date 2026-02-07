@@ -6,7 +6,6 @@ const READ_ACCESS_TOKEN = import.meta.env.VITE_TMDB_API_READ_ACCESS_TOKEN;
 
 const MAX_REQUESTS = 5;
 const INTERVAL_IN_SECONDS = 10;
-export const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 const getAuthHeaders = (): Record<string, string> => {
   return {

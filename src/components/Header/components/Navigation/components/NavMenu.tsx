@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { HomeIcon } from "@/libs/ui/icons";
+import { HeartFilledIcon, HomeIcon } from "@/libs/ui/icons";
 import { Menu, type MenuProps } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -20,10 +20,15 @@ const NavMenu: FC<NavMenuProps> = ({ layout, closeDrawer }) => {
       key: "/",
       icon: <HomeIcon />,
     },
+    {
+      label: "My Favorites",
+      key: "/my-favorites",
+      icon: <HeartFilledIcon />,
+    },
   ];
 
   const handleItemClick: MenuProps["onClick"] = ({ key }) => {
-      navigate(key);
+    navigate(key);
     closeDrawer?.();
   };
 

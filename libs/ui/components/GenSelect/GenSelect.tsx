@@ -1,8 +1,8 @@
 import { type FC } from "react";
 import { Select, type SelectProps } from "antd";
 import { ArrowDownIcon } from "@/libs/ui/icons";
-import "./gen-select.style.css";
 import clsx from "clsx";
+import "./gen-select.style.css";
 
 const GenSelect: FC<SelectProps> = ({ ...props }) => {
   return (

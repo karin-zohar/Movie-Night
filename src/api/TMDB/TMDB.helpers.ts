@@ -1,6 +1,8 @@
 import type { Movie, TMDBMovieResponse } from "@/types/movie";
-import { TMDB_IMAGE_BASE_URL } from "./TMDB.client";
 import DefaultMoviePoster from "@/assets/img/default-movie-poster.svg?url";
+
+const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
+
 
 export const mapTMDBMovie = (movie: TMDBMovieResponse): Movie => ({
   id: String(movie.id),
