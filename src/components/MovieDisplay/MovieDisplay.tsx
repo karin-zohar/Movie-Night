@@ -6,7 +6,7 @@ import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
 import MovieList from "./components/MovieList/MovieList";
 
 const getMovieEndpoint = (filter: MovieFilter): string => {
-  if (filter.search) {
+  if (filter.search && filter.search.trim().length >= 2) {
     return `/search/movie?page=1&query=${encodeURIComponent(filter.search)}`;
   }
   return `/movie/${filter.category ?? 'popular'}?page=1`;

@@ -15,7 +15,10 @@ const MovieFilters: FC<MovieFiltersProps> = ({ setFilter }) => {
 
     const debouncedSetSearch = useCallback(
         debounce((search: string) => {
-            setFilter((prev) => ({ ...prev, search }));
+            const trimmed = search.trim();
+            if (trimmed.length === 0 || trimmed.length >= 2) {
+                setFilter((prev) => ({ ...prev, search: trimmed }));
+            }
         }, 200),
         [setFilter]
     );
