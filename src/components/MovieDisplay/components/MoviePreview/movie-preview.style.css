@@ -1,6 +1,10 @@
 .movie-preview-link {
     text-decoration: none;
     color: inherit;
+
+    &:focus-visible {
+        outline: none;
+    }
 }
 
 .movie-preview {
@@ -12,7 +16,8 @@
     gap: 4px;
     transition: transform 0.2s, border-color 0.2s;
 
-    &:hover {
+    &:hover,
+    .movie-preview-link:focus-visible & {
         transform: translateY(-2px) scale(1.04);
         border-color: var(--blue-400);
 
