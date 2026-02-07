@@ -1,36 +1,22 @@
-.gen-radio-buttons {
-  .ant-radio-wrapper {
-    .ant-radio-inner {
-      border: 2px solid var(--gray-1000);
-    }
-    .ant-radio-checked {
-      .ant-radio-inner {
-        background-color: var(--tile-green);
-        &::after {
-          background-color: var(--tile-green);
-        }
-      }
-    }
+.ant-radio-group.ant-radio-group-solid.gen-radio-buttons {
+  display: flex;
+  gap: 12px;
 
-    &:hover {
-      .ant-radio:not(.ant-radio-checked) {
-        .ant-radio-inner {
-          border-color: var(--tile-yellow);
-        }
-      }
+  .ant-radio-button-wrapper {
+    border-radius: 10px;
+    border: 2px solid var(--gray-600);
+    color: var(--gray-600);
+    font-family: 'Roboto', Arial, sans-serif;
+
+    &.ant-radio-button-wrapper-checked {
+      border: 2px solid var(--blue-400);
+      color: var(--white-0);
+      background-color: var(--blue-400);
     }
 
-    &.ant-radio-wrapper-disabled {
-      .ant-radio {
-        border: 1px solid var(--gray-400);
-        .ant-radio-inner {
-          border: none;
-        }
-
-        &.ant-radio-checked {
-          background-color: var(--gray-500);
-        }
-      }
+    &:not(.ant-radio-button-wrapper-checked):hover {
+      color: var(--blue-400);
+      border-color: var(--blue-400);
     }
   }
 }
