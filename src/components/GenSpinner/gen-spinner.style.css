@@ -1,0 +1,11 @@
+.gen-spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    .ant-spin {
+        color: var(--blue-400);
+    }
+
+}

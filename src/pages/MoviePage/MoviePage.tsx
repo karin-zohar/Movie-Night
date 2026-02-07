@@ -1,26 +1,41 @@
-import type { Movie } from "@/types/movie";
+import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
+import { TMDBClient, TMDB_IMAGE_BASE_URL } from "@/api/TMDB.client";
 import MovieDetails from "./components/MovieDetails/MovieDetails";
 import MovieActions from "./components/MovieActions/MovieActions";
+import type { Movie, TMDBMovieResponse } from "@/types/movie";
+import GenSpinner from "@/components/GenSpinner/GenSpinner";
+import GenErrorMessage from "@/components/GenErrorMessage/GenErrorMessage";
 import { Flex } from "antd";
 import './movie-page.style.css';
+
+const fetchMovie = async (movieId: string): Promise<Movie> => {
+    const data = await TMDBClient.get<TMDBMovieResponse>(`/movie/${movieId}`);
+    return {
+        id: String(data.id),
+        title: data.title,
+        description: data.overview,
+        imageUrl: data.poster_path
+            ? `${TMDB_IMAGE_BASE_URL}${data.poster_path}`
+            : "",
+    };
+};
 
 const MoviePage = () => {
     const { id: movieId } = useParams();
 
-    // TODO: GET movie from API / Local storage
-    const movie: Movie | null = movieId
-        ? {
-            id: movieId,
-            title: "The Dark Knight",
-            description: "A movie about a dark knight",
-            imageUrl: "https://plus.unsplash.com/premium_photo-1710409625244-e9ed7e98f67b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        }
-        : null;
+    const { data: movie, isLoading, error } = useQuery({
+        queryKey: ["movie", movieId],
+        queryFn: () => fetchMovie(movieId!),
+        enabled: !!movieId,
+    });
+
+    if (isLoading) { return <GenSpinner /> };
+    if (error) { return <GenErrorMessage error={error} /> };
 
     return (
         <Flex className="movie-page">
-            <MovieDetails movie={movie} />
+            <MovieDetails movie={movie ?? null} />
             <MovieActions onSaveAsFavorite={() => {
                 // TODO: implement save as favorite logic
                 console.log("Saved as favorite:", movie?.id);

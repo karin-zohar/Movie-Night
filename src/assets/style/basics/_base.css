@@ -37,7 +37,10 @@ html {
   h5,
   h6 {
     &.ant-typography {
-      font-family: "Contrail";
+      font-family: 'Contrail',
+        Arial,
+        Helvetica,
+        sans-serif;
       color: inherit;
       line-height: 1.1em;
       margin-block: 10px;
@@ -47,6 +50,13 @@ html {
 
   span.ant-typography {
     line-height: 1.5em;
+
+    &.ant-typography-danger {
+      font-size: 2em;
+      text-align: center;
+      font-family: 'Contrail', Arial, Helvetica, sans-serif;
+      color: var(--red-400);
+    }
   }
 }
 
