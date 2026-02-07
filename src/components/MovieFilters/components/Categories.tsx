@@ -16,6 +16,7 @@ type CategoriesProps = {
 const Categories: FC<CategoriesProps> = ({ value, onChange }) => {
     return (
         <GenRadioButtons
+            className="movie-filters-categories"
             options={categoryOptions}
             value={value}
             onChange={onChange}

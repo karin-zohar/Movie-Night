@@ -2,8 +2,9 @@ import type { MovieFilter } from "@/types/movie";
 import { Form } from "antd";
 import { type Dispatch, type FC, type SetStateAction, useCallback } from "react";
 import { debounce } from "es-toolkit";
-import SearchBar from "./components/SearchBar/SearchBar";
-import Categories from "./components/Categories/Categories";
+import SearchBar from "./components/SearchBar";
+import Categories from "./components/Categories";
+import './movie-filters.style.css';
 
 type MovieFiltersProps = {
     setFilter: Dispatch<SetStateAction<MovieFilter>>;
