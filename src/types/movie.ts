@@ -5,6 +5,12 @@ export type Movie = {
   imageUrl: string;
 };
 
+export type MovieFilter =
+ {
+  category?: "popular" | "now_playing";
+  search?: string;
+ }
+
 export interface TMDBMovieResponse {
   id: number;
   title: string;

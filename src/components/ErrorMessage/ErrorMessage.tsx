@@ -16,11 +16,11 @@ const STATUS_MESSAGES: Record<number, string> = {
 
 const DEFAULT_MESSAGE = "Something went wrong. Please try again later.";
 
-type GenErrorMessageProps = {
+type ErrorMessageProps = {
   error: Error & { status?: number };
 };
 
-const GenErrorMessage: FC<GenErrorMessageProps> = ({ error }) => {
+const ErrorMessage: FC<ErrorMessageProps> = ({ error }) => {
   const { Text } = Typography;
 
   return (
@@ -38,4 +38,4 @@ const GenErrorMessage: FC<GenErrorMessageProps> = ({ error }) => {
   );
 };
 
-export default GenErrorMessage;
+export default ErrorMessage;

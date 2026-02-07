@@ -4,8 +4,8 @@ import { TMDBClient, TMDB_IMAGE_BASE_URL } from "@/api/TMDB.client";
 import MovieDetails from "./components/MovieDetails/MovieDetails";
 import MovieActions from "./components/MovieActions/MovieActions";
 import type { Movie, TMDBMovieResponse } from "@/types/movie";
-import GenSpinner from "@/components/GenSpinner/GenSpinner";
-import GenErrorMessage from "@/components/GenErrorMessage/GenErrorMessage";
+import GenSpinner from "@/libs/ui/components/GenSpinner/GenSpinner";
+import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
 import { Flex } from "antd";
 import './movie-page.style.css';
 
@@ -31,7 +31,7 @@ const MoviePage = () => {
     });
 
     if (isLoading) { return <GenSpinner /> };
-    if (error) { return <GenErrorMessage error={error} /> };
+    if (error) { return <ErrorMessage error={error} /> };
 
     return (
         <Flex className="movie-page">
