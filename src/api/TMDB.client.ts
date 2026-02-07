@@ -22,13 +22,4 @@ export const TMDBClient = {
     );
   },
 
-  post<TResponse = unknown>(path: string, body?: unknown) {
-    return apiRequest<TResponse>(
-      TMDB_BASE_URL,
-      "POST",
-      path,
-      body,
-      getAuthHeaders()
-    );
-  },
-};
+}
