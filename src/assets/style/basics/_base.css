@@ -6,17 +6,17 @@ html {
   height: 100vh;
   font-family: "Roboto", Arial, sans-serif;
 
-  &[data-theme="light"] {
-    color-scheme: light;
-  }
-
-  &[data-theme="dark"] {
-    color-scheme: dark;
-  }
-
   .theme {
     background-color: light-dark(var(--white-100), var(--gray-1000));
     color: light-dark(var(--gray-1000), var(--white-100));
+
+    &.light {
+      color-scheme: light;
+    }
+
+    &.dark {
+      color-scheme: dark;
+    }
   }
 
   font-size: 16px;

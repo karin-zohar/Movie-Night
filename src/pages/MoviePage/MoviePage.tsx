@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
 import { TMDBClient, mapTMDBMovie } from "@/api/TMDB";
@@ -19,6 +20,15 @@ const MoviePage = () => {
     const { id: movieId } = useParams();
     const { addFavorite, removeFavorite, isFavorite } = useFavorites();
 
+    const handleToggleFavorite = useCallback(() => {
+        if (!movieId) { return };
+        if (isFavorite(movieId)) {
+            removeFavorite(movieId);
+        } else {
+            addFavorite(movieId);
+        }
+    }, [movieId, isFavorite, addFavorite, removeFavorite]);
+
     const { data: movie, isLoading, error } = useQuery({
         queryKey: ["movie", movieId],
         queryFn: () => fetchMovie(movieId!),
@@ -28,18 +38,10 @@ const MoviePage = () => {
     if (isLoading) { return <GenSpinner /> };
     if (error) { return <ErrorMessage error={error} /> };
 
-    const handleToggleFavorite = () => {
-        if (!movie?.id) { return };
-        if (isFavorite(movie?.id)) {
-            removeFavorite(movie?.id);
-        } else {
-            addFavorite(movie?.id);
-        }
-    };
     return (
         <Flex className="movie-page">
             <MovieDetails movie={movie ?? null} />
-            <MovieActions onToggleFavorite={handleToggleFavorite} isFavorite={movie?.id ? isFavorite(movie?.id) : false} />
+            <MovieActions onToggleFavorite={handleToggleFavorite} isFavorite={movieId ? isFavorite(movieId) : false} />
         </Flex>
     );
 };

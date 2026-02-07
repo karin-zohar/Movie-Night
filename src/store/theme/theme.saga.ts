@@ -1,5 +1,5 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import { setTheme, initTheme, type Theme } from "./theme.slice";
+import { setTheme, type Theme } from "./theme.slice";
 
 const THEME_STORAGE_KEY = "app-theme";
 
@@ -15,23 +15,16 @@ const saveThemeToStorage = (theme: Theme): void => {
   localStorage.setItem(THEME_STORAGE_KEY, theme);
 };
 
-const applyThemeToDocument = (theme: Theme): void => {
-  document.documentElement.setAttribute("data-theme", theme);
-};
-
 function* handleSetTheme(action: ReturnType<typeof setTheme>) {
-  const theme = action.payload;
-  yield call(saveThemeToStorage, theme);
-  yield call(applyThemeToDocument, theme);
+  yield call(saveThemeToStorage, action.payload);
 }
 
 function* handleInitTheme() {
   const theme: Theme = yield call(loadThemeFromStorage);
-  yield put(initTheme(theme));
-  yield call(applyThemeToDocument, theme);
+  yield put(setTheme(theme));
 }
 
 export default function* themeSaga() {
-  yield call(handleInitTheme);
   yield takeLatest(setTheme.type, handleSetTheme);
+  yield call(handleInitTheme);
 }

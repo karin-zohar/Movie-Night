@@ -39,21 +39,26 @@ const MovieDisplay = ({ filter = { category: "popular" } }: MovieDisplayProps) =
   const { favoriteIds } = useFavorites();
   const isFavoritesView = filter.category === "my_favorites";
 
-  const { data: movies, isLoading, error } = useQuery({
-    queryKey: isFavoritesView ? ["movies", "favorites", favoriteIds] : ["movies", filter],
-    queryFn: () =>
-      isFavoritesView
-        ? fetchFavoriteMovies(favoriteIds)
-        : fetchMovies(filter),
+  const moviesQuery = useQuery({
+    queryKey: ["movies", filter],
+    queryFn: () => fetchMovies(filter),
+    staleTime: 5 * 60 * 1000,
+    enabled: !isFavoritesView,
   });
+
+  const favoritesQuery = useQuery({
+    queryKey: ["movies", "favorites", favoriteIds],
+    queryFn: () => fetchFavoriteMovies(favoriteIds),
+    enabled: isFavoritesView,
+  });
+
+  const { data: movies, isLoading, error } = isFavoritesView ? favoritesQuery : moviesQuery;
 
   if (isLoading) { return <GenSpinner /> };
   if (error) { return <ErrorMessage error={error} /> };
 
   return (
-    <div className="movie-display">
-      <MovieList movies={movies ?? []} />
-    </div>
+    <MovieList movies={movies ?? []} />
   );
 };
 

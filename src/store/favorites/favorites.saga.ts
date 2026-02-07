@@ -8,35 +8,35 @@ import type { RootState } from "../store";
 
 const FAVORITES_STORAGE_KEY = "user-favorite-movies";
 
-const loadFavoritesFromStorage = (): string[] => {
+const loadFavoritesFromStorage = (): Record<string, boolean> => {
   try {
     const stored = localStorage.getItem(FAVORITES_STORAGE_KEY);
     if (stored) {
       const parsed = JSON.parse(stored);
       if (Array.isArray(parsed) && parsed.every((id) => typeof id === "string")) {
-        return parsed;
+        return Object.fromEntries(parsed.map((id) => [id, true]));
       }
     }
   } catch (error) {
+    console.error("Failed to load favorites from localStorage. Clearing corrupted data.");
     localStorage.removeItem(FAVORITES_STORAGE_KEY);
-    throw new Error("Failed to load favorites from localStorage. Clearing corrupted data.");
   }
-  return [];
+  return {};
 };
 
-const saveFavoritesToStorage = (movieIds: string[]): void => {
-  localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(movieIds));
+const saveFavoritesToStorage = (movieIds: Record<string, boolean>): void => {
+  localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(Object.keys(movieIds)));
 };
 
 function* persistFavorites() {
-  const movieIds: string[] = yield select(
+  const movieIds: Record<string, boolean> = yield select(
     (state: RootState) => state.favorites.movieIds
   );
   yield call(saveFavoritesToStorage, movieIds);
 }
 
 function* handleInitFavorites() {
-  const movieIds: string[] = yield call(loadFavoritesFromStorage);
+  const movieIds: Record<string, boolean> = yield call(loadFavoritesFromStorage);
   yield put(initFavorites(movieIds));
 }
 

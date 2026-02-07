@@ -1,6 +1,6 @@
 
 import { MoonIcon, SunIcon } from "@/libs/ui/icons";
-import { useTheme } from "@/store";
+import { useTheme, type Theme } from "@/store";
 import GenSelect from "@/libs/ui/components/GenSelect/GenSelect";
 
 const themeOptions = [
@@ -24,7 +24,7 @@ const SelectTheme = () => {
         <GenSelect
             options={themeOptions}
             value={theme}
-            onChange={(value) => setTheme(value)}
+            onChange={(value: Theme) => setTheme(value)}
         />
     );
 };
