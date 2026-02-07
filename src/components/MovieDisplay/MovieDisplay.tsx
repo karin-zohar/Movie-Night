@@ -4,6 +4,7 @@ import { TMDBClient, TMDB_IMAGE_BASE_URL } from "@/api/TMDB.client";
 import GenSpinner from "@/libs/ui/components/GenSpinner/GenSpinner";
 import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
 import MovieList from "./components/MovieList/MovieList";
+import DefaultMoviePoster from "@/assets/img/default-movie-poster.jpg";
 
 const getMovieEndpoint = (filter: MovieFilter): string => {
   if (filter.search && filter.search.trim().length >= 2) {
@@ -23,7 +24,7 @@ const fetchMovies = async (filter: MovieFilter): Promise<Movie[]> => {
     description: movie.overview,
     imageUrl: movie.poster_path
       ? `${TMDB_IMAGE_BASE_URL}${movie.poster_path}`
-      : "",
+      : DefaultMoviePoster,
   }));
 };
 

@@ -19,7 +19,7 @@ const MovieFilters: FC<MovieFiltersProps> = ({ setFilter }) => {
             if (trimmed.length === 0 || trimmed.length >= 2) {
                 setFilter((prev) => ({ ...prev, search: trimmed }));
             }
-        }, 200),
+        }, 500),
         [setFilter]
     );
 

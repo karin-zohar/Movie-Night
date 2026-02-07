@@ -6,6 +6,7 @@ import MovieActions from "./components/MovieActions/MovieActions";
 import type { Movie, TMDBMovieResponse } from "@/types/movie";
 import GenSpinner from "@/libs/ui/components/GenSpinner/GenSpinner";
 import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
+import DefaultMoviePoster from "@/assets/img/default-movie-poster.jpg";
 import { Flex } from "antd";
 import './movie-page.style.css';
 
@@ -17,7 +18,7 @@ const fetchMovie = async (movieId: string): Promise<Movie> => {
         description: data.overview,
         imageUrl: data.poster_path
             ? `${TMDB_IMAGE_BASE_URL}${data.poster_path}`
-            : "",
+            : DefaultMoviePoster,
     };
 };
 
