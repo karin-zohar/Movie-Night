@@ -7,7 +7,7 @@ export type Movie = {
 
 export type MovieFilter =
  {
-  category?: "popular" | "now_playing";
+  category?: "popular" | "now_playing" | "my_favorites";
   search?: string;
  }
 

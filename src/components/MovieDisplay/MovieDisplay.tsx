@@ -15,6 +15,17 @@ const getMovieEndpoint = (filter: MovieFilter): string => {
 };
 
 const fetchMovies = async (filter: MovieFilter): Promise<Movie[]> => {
+  if (filter.category && filter.category === 'my_favorites') {
+    // temporary mock data for favorites
+    return [
+      {
+        id: "1",
+        title: "Movie 1",
+        description: "Description 1",
+        imageUrl: DefaultMoviePoster,
+      },
+    ];
+  }
   const endpoint = getMovieEndpoint(filter);
   const data = await TMDBClient.get<TMDBMovieListResponse>(endpoint);
 
