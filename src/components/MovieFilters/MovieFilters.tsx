@@ -10,33 +10,52 @@ type MovieFiltersProps = {
     setFilter: Dispatch<SetStateAction<MovieFilter>>;
 };
 
+const MIN_SEARCH_LENGTH = 2
+const DEFAULT_CATEGORY = "popular"
+
 const MovieFilters: FC<MovieFiltersProps> = ({ setFilter }) => {
     const [form] = Form.useForm<MovieFilter>();
 
     const debouncedSetSearch = useCallback(
         debounce((search: string) => {
             const trimmed = search.trim();
-            if (trimmed.length === 0 || trimmed.length >= 2) {
-                setFilter((prev) => ({ ...prev, search: trimmed }));
-            }
+            const category = form.getFieldValue("category") ?? DEFAULT_CATEGORY;
+
+            const newFilter = trimmed.length >= MIN_SEARCH_LENGTH
+                ? { search: trimmed }
+                : { category };
+
+            setFilter(newFilter);
         }, 500),
-        [setFilter]
+        [setFilter, form]
     );
 
-    const onValuesChange = (changedValues: Partial<MovieFilter>) => {
-        if ("search" in changedValues) {
-            debouncedSetSearch(changedValues.search ?? "");
+    const onValuesChange = useCallback((changedValues: Partial<MovieFilter>) => {
+        const { search, category } = changedValues;
+
+        if (search !== undefined) {
+            const trimmed = search.trim();
+
+            if (trimmed.length >= MIN_SEARCH_LENGTH) {
+                form.setFieldsValue({ category: undefined });
+            } else if (trimmed.length === 0) {
+                form.setFieldsValue({ category: DEFAULT_CATEGORY });
+            }
+
+            debouncedSetSearch(search);
         }
-        if ("category" in changedValues) {
-            setFilter((prev) => ({ ...prev, category: changedValues.category }));
+
+        if (category !== undefined) {
+            debouncedSetSearch.cancel();
+            form.setFieldsValue({ search: "" });
+            setFilter({ category });
         }
-    };
+    }, [form, debouncedSetSearch, setFilter]);
 
     return (
         <div className="movie-filters">
             <Form<MovieFilter>
                 form={form}
-                initialValues={{ category: "popular" }}
                 onValuesChange={onValuesChange}
             >
                 <Form.Item name="search">

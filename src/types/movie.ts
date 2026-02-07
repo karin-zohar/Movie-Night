@@ -5,8 +5,7 @@ export type Movie = {
   imageUrl: string;
 };
 
-export type MovieFilter =
- {
+export type MovieFilter = {
   category?: "popular" | "now_playing" | "my_favorites";
   search?: string;
  }

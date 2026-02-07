@@ -21,7 +21,7 @@ export const waitForRateLimit = async (
   timestamps.push(...recentTimestamps);
 
   if (timestamps.length >= maxRequests) {
-    const waitTime = timestamps[0] + intervalInSeconds * 1000 - now;
+    const waitTime = Math.max(timestamps[0] + intervalInSeconds * 1000 - now, 0);
     await new Promise((resolve) => setTimeout(resolve, waitTime));
     
     return waitForRateLimit(key, maxRequests, intervalInSeconds);
