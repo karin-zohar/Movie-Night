@@ -1,29 +1,33 @@
+import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
-import { TMDBClient, TMDB_IMAGE_BASE_URL } from "@/api/TMDB.client";
+import { TMDBClient, mapTMDBMovie } from "@/api/TMDB";
 import MovieDetails from "./components/MovieDetails/MovieDetails";
 import MovieActions from "./components/MovieActions/MovieActions";
 import type { Movie, TMDBMovieResponse } from "@/types/movie";
 import GenSpinner from "@/libs/ui/components/GenSpinner/GenSpinner";
 import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
-import DefaultMoviePoster from "@/assets/img/default-movie-poster.svg";
 import { Flex } from "antd";
 import './movie-page.style.css';
+import { useFavorites } from "@/store";
 
 const fetchMovie = async (movieId: string): Promise<Movie> => {
     const data = await TMDBClient.get<TMDBMovieResponse>(`/movie/${movieId}`);
-    return {
-        id: String(data.id),
-        title: data.title,
-        description: data.overview,
-        imageUrl: data.poster_path
-            ? `${TMDB_IMAGE_BASE_URL}${data.poster_path}`
-            : DefaultMoviePoster,
-    };
+    return mapTMDBMovie(data);
 };
 
 const MoviePage = () => {
     const { id: movieId } = useParams();
+    const { addFavorite, removeFavorite, isFavorite } = useFavorites();
+
+    const handleToggleFavorite = useCallback(() => {
+        if (!movieId) { return };
+        if (isFavorite(movieId)) {
+            removeFavorite(movieId);
+        } else {
+            addFavorite(movieId);
+        }
+    }, [movieId, isFavorite, addFavorite, removeFavorite]);
 
     const { data: movie, isLoading, error } = useQuery({
         queryKey: ["movie", movieId],
@@ -37,10 +41,7 @@ const MoviePage = () => {
     return (
         <Flex className="movie-page">
             <MovieDetails movie={movie ?? null} />
-            <MovieActions onSaveAsFavorite={() => {
-                // TODO: implement save as favorite logic
-                console.log("Saved as favorite:", movie?.id);
-            }} />
+            <MovieActions onToggleFavorite={handleToggleFavorite} isFavorite={movieId ? isFavorite(movieId) : false} />
         </Flex>
     );
 };

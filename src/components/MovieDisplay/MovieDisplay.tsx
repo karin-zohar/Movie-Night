@@ -1,41 +1,34 @@
 import { useQuery } from "@tanstack/react-query";
-import type { Movie, MovieFilter, TMDBMovieListResponse } from "@/types/movie";
-import { TMDBClient, TMDB_IMAGE_BASE_URL } from "@/api/TMDB.client";
+import type { Movie, MovieFilter, TMDBMovieListResponse, TMDBMovieResponse } from "@/types/movie";
+import { TMDBClient, mapTMDBMovie } from "@/api/TMDB";
+import { useFavorites } from "@/store";
 import GenSpinner from "@/libs/ui/components/GenSpinner/GenSpinner";
 import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
 import MovieList from "./components/MovieList/MovieList";
-import DefaultMoviePoster from "@/assets/img/default-movie-poster.svg?url";
 
-const getMovieEndpoint = (filter: MovieFilter): string => {
+const getMovieListEndpoint = (filter: MovieFilter): string => {
   if (filter.search && filter.search.trim().length >= 2) {
     return `/search/movie?page=1&query=${encodeURIComponent(filter.search)}`;
   }
   return `/movie/${filter.category ?? 'popular'}?page=1`;
 };
 
-const fetchMovies = async (filter: MovieFilter): Promise<Movie[]> => {
-  if (filter.category && filter.category === 'my_favorites') {
-    // temporary mock data for favorites
-    return [
-      {
-        id: "1",
-        title: "Movie 1",
-        description: "Description 1",
-        imageUrl: DefaultMoviePoster,
-      },
-    ];
-  }
-  const endpoint = getMovieEndpoint(filter);
-  const data = await TMDBClient.get<TMDBMovieListResponse>(endpoint);
+const fetchFavoriteMovies = async (favoriteMovieIds: string[]): Promise<Movie[]> => {
+  if (favoriteMovieIds.length === 0) return [];
 
-  return data.results.map((movie) => ({
-    id: String(movie.id),
-    title: movie.title,
-    description: movie.overview,
-    imageUrl: movie.poster_path
-      ? `${TMDB_IMAGE_BASE_URL}${movie.poster_path}`
-      : DefaultMoviePoster,
-  }));
+  const results = await Promise.allSettled(
+    favoriteMovieIds.map((id) => TMDBClient.get<TMDBMovieResponse>(`/movie/${id}`))
+  );
+
+  return results
+    .filter((result) => result.status === "fulfilled")
+    .map((result) => mapTMDBMovie(result.value));
+};
+
+const fetchMovies = async (filter: MovieFilter): Promise<Movie[]> => {
+  const endpoint = getMovieListEndpoint(filter);
+  const data = await TMDBClient.get<TMDBMovieListResponse>(endpoint);
+  return data.results.map(mapTMDBMovie);
 };
 
 interface MovieDisplayProps {
@@ -43,18 +36,29 @@ interface MovieDisplayProps {
 }
 
 const MovieDisplay = ({ filter = { category: "popular" } }: MovieDisplayProps) => {
-  const { data: movies, isLoading, error } = useQuery({
+  const { favoriteIds } = useFavorites();
+  const isFavoritesView = filter.category === "my_favorites";
+
+  const moviesQuery = useQuery({
     queryKey: ["movies", filter],
     queryFn: () => fetchMovies(filter),
+    staleTime: 5 * 60 * 1000,
+    enabled: !isFavoritesView,
   });
+
+  const favoritesQuery = useQuery({
+    queryKey: ["movies", "favorites", favoriteIds],
+    queryFn: () => fetchFavoriteMovies(favoriteIds),
+    enabled: isFavoritesView,
+  });
+
+  const { data: movies, isLoading, error } = isFavoritesView ? favoritesQuery : moviesQuery;
 
   if (isLoading) { return <GenSpinner /> };
   if (error) { return <ErrorMessage error={error} /> };
 
   return (
-    <div className="movie-display">
-      <MovieList movies={movies ?? []} />
-    </div>
+    <MovieList movies={movies ?? []} />
   );
 };
 

@@ -5,7 +5,7 @@
 
 .movie-preview {
     height: 240px;
-    border: 3px solid var(--gray-1000);
+    border: 3px solid light-dark(var(--gray-1000), var(--white-100));
     border-radius: 4px;
     display: flex;
     flex-direction: column;
@@ -46,7 +46,7 @@
         .movie-preview-description {
             max-height: 100%;
             overflow: hidden;
-            color: var(--gray-500);
+            color: light-dark(var(--gray-500), var(--gray-300));
             mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
             -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
         }

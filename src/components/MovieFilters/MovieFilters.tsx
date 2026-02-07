@@ -8,12 +8,13 @@ import './movie-filters.style.css';
 
 type MovieFiltersProps = {
     setFilter: Dispatch<SetStateAction<MovieFilter>>;
+    initialCategory?: MovieFilter["category"];
 };
 
 const MIN_SEARCH_LENGTH = 2
-const DEFAULT_CATEGORY = "popular"
+const DEFAULT_CATEGORY: MovieFilter["category"] = "popular"
 
-const MovieFilters: FC<MovieFiltersProps> = ({ setFilter }) => {
+const MovieFilters: FC<MovieFiltersProps> = ({ setFilter, initialCategory = DEFAULT_CATEGORY }) => {
     const [form] = Form.useForm<MovieFilter>();
 
     const debouncedSetSearch = useCallback(
@@ -61,7 +62,7 @@ const MovieFilters: FC<MovieFiltersProps> = ({ setFilter }) => {
                 <Form.Item name="search">
                     <SearchBar />
                 </Form.Item>
-                <Form.Item name="category" initialValue="popular">
+                <Form.Item name="category" initialValue={initialCategory}>
                     <Categories />
                 </Form.Item>
             </Form>

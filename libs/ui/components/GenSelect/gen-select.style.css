@@ -1,0 +1,30 @@
+.gen-select {
+  color: light-dark(var(--gray-1000), var(--white-100));
+
+  .ant-select-selection-item {
+    font-size: 18px;
+  }
+
+  .ant-select-arrow {
+    font-size: 10px;
+  }
+}
+
+.ant-select-dropdown {
+  box-shadow: none;
+  min-width: fit-content;
+  background: light-dark(var(--gray-200), var(--gray-600));
+
+  .ant-select-item.ant-select-item-option {
+    color: light-dark(var(--gray-1000), var(--white-100));
+
+    &.ant-select-item-option-selected {
+      background: none;
+      color: var(--blue-400);
+    }
+
+    &:hover {
+      background-color: light-dark(var(--blue-200), var(--blue-700));
+    }
+  }
+}

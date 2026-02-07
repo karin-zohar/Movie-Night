@@ -8,7 +8,7 @@ type MovieDetailsProps = {
 };
 
 const MovieDetails: FC<MovieDetailsProps> = ({ movie }) => {
-  const { Title, Paragraph } = Typography;
+  const { Title } = Typography;
 
   if (!movie) {
     return <div className="movie-details">Movie not found.</div>;
@@ -24,7 +24,7 @@ const MovieDetails: FC<MovieDetailsProps> = ({ movie }) => {
 
       <div className="movie-details-text-wrapper">
         <Title level={2}>{title}</Title>
-        <Paragraph>{description}</Paragraph>
+        <span>{description}</span>
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ button.gen-close-button.ant-btn {
     box-shadow: none;
 
     .ant-btn-icon {
-      color: var(--red-300);
+      color: var(--blue-300);
     }
   }
 
