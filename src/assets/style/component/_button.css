@@ -1,7 +1,7 @@
 button.ant-btn {
   &.custom-button {
     font-family: Roboto, Arial;
-    background-color: light-dark(var(--red-200), var(--red-600));
+    background-color: light-dark(var(--blue-200), var(--blue-600));
     color: light-dark(var(--gray-1000), var(--white-100));
 
     &.ant-btn-variant-outlined.ant-btn-color-default {
@@ -16,23 +16,23 @@ button.ant-btn {
     }
 
     &.ant-btn-variant-solid {
-      background-color: light-dark(var(--red-200), var(--red-600));
+      background-color: light-dark(var(--blue-200), var(--blue-600));
       color: light-dark(var(--gray-1000), var(--white-100));
 
       &:hover {
         transition: 0.4s;
-        background-color: var(--red-300);
+        background-color: var(--blue-300);
       }
     }
 
     &.ant-btn-color-dangerous {
-      background-color: var(--red-700);
+      background-color: var(--blue-700);
       color: var(--white-100);
 
       &:active,
       &:hover {
         transition: 0.5s;
-        background-color: var(--red-500);
+        background-color: var(--blue-500);
       }
     }
   }

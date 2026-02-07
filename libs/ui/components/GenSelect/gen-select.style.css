@@ -1,0 +1,28 @@
+.gen-select {
+  .ant-select-selection-item {
+    font-size: 18px;
+  }
+
+  .ant-select-arrow {
+    font-size: 10px;
+  }
+}
+
+.ant-select-dropdown {
+  box-shadow: none;
+  min-width: fit-content;
+  background: none;
+
+  .ant-select-item.ant-select-item-option {
+    color: light-dark(var(--gray-1000), var(--white-100));
+
+    &.ant-select-item-option-selected {
+      background: none;
+      color: var(--blue-400);
+    }
+
+    &:hover {
+      background-color: var(--gray-100);
+    }
+  }
+}

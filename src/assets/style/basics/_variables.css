@@ -25,8 +25,15 @@
   --red-900: #14170c;
 
 
+  --blue-100: #e6f0ff;
+  --blue-200: #cce0ff;
+  --blue-300: #99c2ff;
   --blue-400: #2f92fc;
   --blue-500: #007bff;
+  --blue-600: #0056b3;
+  --blue-700: #003d80;
+  --blue-800: #002950;
+  --blue-900: #001420;
 
   /* Styles */
   --box-shadow: 5px 5px 9px 1px var(--shadow);

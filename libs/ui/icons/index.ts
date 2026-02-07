@@ -8,3 +8,6 @@ export { IoBackspaceOutline as BackspaceIcon } from "react-icons/io5";
 export { ImSpinner2 as SpinnerIcon } from "react-icons/im";
 export { BsEraser as EraserIcon } from "react-icons/bs";
 export { IoSearchOutline as SearchIcon } from "react-icons/io5";
+export { FiSun as SunIcon } from "react-icons/fi";
+export { FiMoon as MoonIcon } from "react-icons/fi";
+export { FaAngleDown as ArrowDownIcon } from "react-icons/fa6";
