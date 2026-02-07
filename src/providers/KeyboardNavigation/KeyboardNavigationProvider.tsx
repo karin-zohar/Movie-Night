@@ -21,10 +21,25 @@ interface KeyboardNavigationContextType {
 
 const KeyboardNavigationContext = createContext<KeyboardNavigationContextType | null>(null);
 
-export const KeyboardNavigationProvider: FC<{ children: ReactNode }> = ({ children }) => {
+interface KeyboardNavigationProviderProps {
+    children: ReactNode;
+    onExit?: () => void;
+    exitKeys?: string[];
+}
+
+export const KeyboardNavigationProvider: FC<KeyboardNavigationProviderProps> = ({
+    children,
+    onExit,
+    exitKeys = ['Escape'],
+}) => {
     const [activeIndex, setActiveIndex] = useState(0);
     const elements = useRef<HTMLElement[]>([]);
     const locked = useRef(false);
+
+    const onExitRef = useRef(onExit);
+    onExitRef.current = onExit;
+    const exitKeysRef = useRef(exitKeys);
+    exitKeysRef.current = exitKeys;
 
     const register = useCallback((el: HTMLElement | null) => {
         if (el && !elements.current.includes(el)) {
@@ -79,6 +94,11 @@ export const KeyboardNavigationProvider: FC<{ children: ReactNode }> = ({ childr
 
             e.preventDefault();
             e.stopImmediatePropagation();
+
+            if (onExitRef.current && exitKeysRef.current.includes(e.key)) {
+                onExitRef.current();
+                return;
+            }
 
             switch (e.key) {
                 case 'ArrowDown':

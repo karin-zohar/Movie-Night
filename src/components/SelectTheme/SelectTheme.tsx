@@ -17,8 +17,6 @@ const themeOptions = themeOptionsData.map(({ value, icon: Icon, label }) => ({
     title: label,
 }));
 
-const DROPDOWN_CLASS = "select-theme-dropdown";
-
 const SelectTheme = () => {
     const { theme, setTheme } = useTheme();
     const { unlock } = useKeyboardNavigation();
@@ -41,11 +39,6 @@ const SelectTheme = () => {
         setDropdownOpen(false);
         unlock();
     }, [setTheme, unlock]);
-
-    const handleDropdownVisibleChange = (open: boolean) => {
-        setDropdownOpen(open);
-        if (!open) unlock();
-    };
 
     // Keyboard navigation when dropdown is open
     useEffect(() => {
@@ -87,7 +80,7 @@ const SelectTheme = () => {
 
         const updateHighlight = () => {
             if (cancelled) return;
-            const dropdown = document.querySelector(`.${DROPDOWN_CLASS}`);
+            const dropdown = document.querySelector('.ant-select-dropdown');
             if (!dropdown) {
                 requestAnimationFrame(updateHighlight);
                 return;
@@ -107,11 +100,9 @@ const SelectTheme = () => {
         <KeyboardNavigable interactive onActivate={handleActivate}>
             <GenSelect
                 open={dropdownOpen}
-                onDropdownVisibleChange={handleDropdownVisibleChange}
                 options={themeOptions}
                 value={theme}
                 onChange={handleChange}
-                popupClassName={DROPDOWN_CLASS}
             />
         </KeyboardNavigable>
     );

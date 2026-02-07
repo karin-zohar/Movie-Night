@@ -87,6 +87,15 @@ header {
       flex-direction: column;
       gap: 20px;
 
+      .nav-drawer-close-wrapper {
+        display: flex;
+        justify-content: flex-end;
+
+        .ant-btn-icon {
+          color: light-dark(var(--gray-1000), var(--white-100));
+        }
+      }
+
       .menu.ant-menu.ant-menu-root {
         flex-direction: column;
       }
