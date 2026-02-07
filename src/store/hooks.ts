@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "./store";
 import { setTheme, type Theme } from "./theme";
+import { addFavorite, removeFavorite } from "./favorites";
 import { useCallback } from "react";
 
 export const useAppSelector = useSelector.withTypes<RootState>();
@@ -18,4 +19,35 @@ export const useTheme = () => {
   );
 
   return { theme, setTheme: changeTheme } as const;
+};
+
+export const useFavorites = () => {
+  const movieIds = useAppSelector((state) => state.favorites.movieIds);
+  const dispatch = useAppDispatch();
+
+  const add = useCallback(
+    (movieId: string) => {
+      dispatch(addFavorite(movieId));
+    },
+    [dispatch]
+  );
+
+  const remove = useCallback(
+    (movieId: string) => {
+      dispatch(removeFavorite(movieId));
+    },
+    [dispatch]
+  );
+
+  const isFavorite = useCallback(
+    (movieId: string) => movieIds.includes(movieId),
+    [movieIds]
+  );
+
+  return {
+    favoriteIds: movieIds,
+    addFavorite: add,
+    removeFavorite: remove,
+    isFavorite,
+  } as const;
 };

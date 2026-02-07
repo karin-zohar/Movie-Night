@@ -1,22 +1,24 @@
 import type { FC } from "react";
 import { Button } from "antd";
-import { HeartOutlined } from "@ant-design/icons";
 import './movie-actions.style.css';
+import { HeartFilledIcon, HeartOutlinedIcon } from "@/libs/ui/icons";
 
 type MovieActionsProps = {
-  onSaveAsFavorite: () => void;
+  onToggleFavorite: () => void;
+  isFavorite?: boolean;
 };
 
-const MovieActions: FC<MovieActionsProps> = ({ onSaveAsFavorite }) => {
+const MovieActions: FC<MovieActionsProps> = ({ onToggleFavorite, isFavorite }) => {
+
   return (
     <div className="movie-actions">
       <Button
-        className="custom-button"
+        className="custom-button toggle-favorite-button"
         variant="outlined"
-        icon={<HeartOutlined />}
-        onClick={onSaveAsFavorite}
+        icon={isFavorite ? <HeartFilledIcon /> : <HeartOutlinedIcon />}
+        onClick={onToggleFavorite}
       >
-        Save as Favorite
+        {isFavorite ? "Remove from Favorites" : "Save as Favorite"}
       </Button>
     </div>
   );

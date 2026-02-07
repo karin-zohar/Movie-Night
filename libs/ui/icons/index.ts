@@ -11,3 +11,5 @@ export { IoSearchOutline as SearchIcon } from "react-icons/io5";
 export { FiSun as SunIcon } from "react-icons/fi";
 export { FiMoon as MoonIcon } from "react-icons/fi";
 export { FaAngleDown as ArrowDownIcon } from "react-icons/fa6";
+export { FaRegHeart as HeartOutlinedIcon } from "react-icons/fa";
+export { FaHeart as HeartFilledIcon } from "react-icons/fa";

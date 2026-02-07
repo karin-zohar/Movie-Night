@@ -9,6 +9,7 @@ import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
 import DefaultMoviePoster from "@/assets/img/default-movie-poster.svg";
 import { Flex } from "antd";
 import './movie-page.style.css';
+import { useFavorites } from "@/store";
 
 const fetchMovie = async (movieId: string): Promise<Movie> => {
     const data = await TMDBClient.get<TMDBMovieResponse>(`/movie/${movieId}`);
@@ -24,6 +25,7 @@ const fetchMovie = async (movieId: string): Promise<Movie> => {
 
 const MoviePage = () => {
     const { id: movieId } = useParams();
+    const { addFavorite, removeFavorite, isFavorite } = useFavorites();
 
     const { data: movie, isLoading, error } = useQuery({
         queryKey: ["movie", movieId],
@@ -34,13 +36,18 @@ const MoviePage = () => {
     if (isLoading) { return <GenSpinner /> };
     if (error) { return <ErrorMessage error={error} /> };
 
+    const handleToggleFavorite = () => {
+        if (!movie?.id) { return };
+        if (isFavorite(movie?.id)) {
+            removeFavorite(movie?.id);
+        } else {
+            addFavorite(movie?.id);
+        }
+    };
     return (
         <Flex className="movie-page">
             <MovieDetails movie={movie ?? null} />
-            <MovieActions onSaveAsFavorite={() => {
-                // TODO: implement save as favorite logic
-                console.log("Saved as favorite:", movie?.id);
-            }} />
+            <MovieActions onToggleFavorite={handleToggleFavorite} isFavorite={movie?.id ? isFavorite(movie?.id) : false} />
         </Flex>
     );
 };
