@@ -1,5 +1,5 @@
-import { apiRequest } from "./apiService";
-import { waitForRateLimit } from "./rateLimiter";
+import { apiRequest } from "../apiService";
+import { waitForRateLimit } from "../rateLimiter";
 
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const READ_ACCESS_TOKEN = import.meta.env.VITE_TMDB_API_READ_ACCESS_TOKEN;
