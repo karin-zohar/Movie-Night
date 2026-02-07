@@ -9,17 +9,25 @@ type SearchBarProps = {
 };
 
 const SearchBar: FC<SearchBarProps> = ({ value, onChange }) => {
-    const { register, lock, unlock, isLocked } = useKeyboardNavigation();
+    const { register, unregister, lock, unlock, isLocked } = useKeyboardNavigation();
     const inputRef = useRef<InputRef>(null);
-    const escaping = useRef(false);
+    const isExitingSearchFocus = useRef(false);
+    const registeredRef = useRef<HTMLDivElement | null>(null);
 
     const handleRef = useCallback((el: HTMLDivElement | null) => {
+        const prev = registeredRef.current;
+        if (prev && prev !== el) {
+            unregister(prev);
+        }
+        registeredRef.current = el;
         register(el);
-    }, [register]);
+    }, [register, unregister]);
 
+    // Skip lock if we just exited via Escape to avoid immediately re-locking
+    // when the focusout handler returns focus to the wrapper.
     const handleFocus = useCallback(() => {
-        if (escaping.current) {
-            escaping.current = false;
+        if (isExitingSearchFocus.current) {
+            isExitingSearchFocus.current = false;
             return;
         }
         if (isLocked()) return;
@@ -32,7 +40,7 @@ const SearchBar: FC<SearchBarProps> = ({ value, onChange }) => {
             const nativeInput = inputRef.current?.input;
             if (e.key === 'Escape' && nativeInput && document.activeElement === nativeInput) {
                 e.preventDefault();
-                escaping.current = true;
+                isExitingSearchFocus.current = true;
                 inputRef.current?.blur();
                 unlock();
             }

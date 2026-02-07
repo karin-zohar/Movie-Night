@@ -31,6 +31,12 @@ const MovieFilters: FC<MovieFiltersProps> = ({ setFilter, initialCategory = DEFA
         [setFilter, form]
     );
 
+    const handleCategorySelect = useCallback((category: MovieFilter["category"]) => {
+        debouncedSetSearch.cancel();
+        form.setFieldsValue({ category, search: "" });
+        setFilter({ category });
+    }, [form, debouncedSetSearch, setFilter]);
+
     const onValuesChange = useCallback((changedValues: Partial<MovieFilter>) => {
         const { search, category } = changedValues;
 
@@ -47,11 +53,9 @@ const MovieFilters: FC<MovieFiltersProps> = ({ setFilter, initialCategory = DEFA
         }
 
         if (category !== undefined) {
-            debouncedSetSearch.cancel();
-            form.setFieldsValue({ search: "" });
-            setFilter({ category });
+            handleCategorySelect(category);
         }
-    }, [form, debouncedSetSearch, setFilter]);
+    }, [form, debouncedSetSearch, setFilter, handleCategorySelect]);
 
     return (
         <div className="movie-filters">
@@ -63,7 +67,7 @@ const MovieFilters: FC<MovieFiltersProps> = ({ setFilter, initialCategory = DEFA
                     <SearchBar />
                 </Form.Item>
                 <Form.Item name="category" initialValue={initialCategory}>
-                    <Categories />
+                    <Categories onSelect={handleCategorySelect} />
                 </Form.Item>
             </Form>
         </div>

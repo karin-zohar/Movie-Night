@@ -1,6 +1,7 @@
 import GenRadioButtons from "@/libs/ui/components/GenRadioGroup/GenRadioGroup";
 import { Radio, type RadioChangeEvent } from "antd";
 import type { FC } from "react";
+import type { MovieFilter } from "@/types/movie";
 import { KeyboardNavigable } from "@/providers/KeyboardNavigation";
 
 const categoryOptions = [
@@ -12,9 +13,10 @@ const categoryOptions = [
 type CategoriesProps = {
     value?: string;
     onChange?: (e: RadioChangeEvent) => void;
+    onSelect?: (value: MovieFilter["category"]) => void;
 };
 
-const Categories: FC<CategoriesProps> = ({ value, onChange }) => {
+const Categories: FC<CategoriesProps> = ({ value, onChange, onSelect }) => {
     return (
         <GenRadioButtons
             value={value}
@@ -25,9 +27,7 @@ const Categories: FC<CategoriesProps> = ({ value, onChange }) => {
             {categoryOptions.map(option => (
                 <KeyboardNavigable
                     key={option.value}
-                    onActivate={() => {
-                        onChange?.({ target: { value: option.value } } as RadioChangeEvent);
-                    }}
+                    onActivate={() => onSelect?.(option.value as MovieFilter["category"])}
                 >
                     <Radio.Button value={option.value}>
                         {option.label}

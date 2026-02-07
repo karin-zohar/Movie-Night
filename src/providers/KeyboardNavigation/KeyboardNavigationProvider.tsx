@@ -10,16 +10,18 @@ import {
     type ReactNode,
 } from 'react';
 
-interface KeyboardNavigationContextType {
-    activeIndex: number;
-    setActiveIndex: (index: number) => void;
+interface StableActionsContextType {
     register: (el: HTMLElement | null) => void;
+    unregister: (el: HTMLElement | null) => void;
     lock: () => void;
     unlock: () => void;
     isLocked: () => boolean;
 }
 
-const KeyboardNavigationContext = createContext<KeyboardNavigationContextType | null>(null);
+const StableActionsContext = createContext<StableActionsContextType | null>(null);
+const ActiveIndexContext = createContext<number>(0);
+
+const HANDLED_KEYS = ['Tab', 'ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft', 'Enter', 'Escape'];
 
 interface KeyboardNavigationProviderProps {
     children: ReactNode;
@@ -33,6 +35,9 @@ export const KeyboardNavigationProvider: FC<KeyboardNavigationProviderProps> = (
     exitKeys = ['Escape'],
 }) => {
     const [activeIndex, setActiveIndex] = useState(0);
+    const activeIndexRef = useRef(activeIndex);
+    activeIndexRef.current = activeIndex;
+
     const elements = useRef<HTMLElement[]>([]);
     const locked = useRef(false);
 
@@ -48,14 +53,22 @@ export const KeyboardNavigationProvider: FC<KeyboardNavigationProviderProps> = (
         }
     }, []);
 
+    const unregister = useCallback((el: HTMLElement | null) => {
+        if (!el) return;
+        const index = elements.current.indexOf(el);
+        if (index === -1) return;
+        elements.current.splice(index, 1);
+        setActiveIndex(prev => Math.min(prev, Math.max(elements.current.length - 1, 0)));
+    }, []);
+
     const lock = useCallback(() => {
         locked.current = true;
     }, []);
 
     const unlock = useCallback(() => {
         locked.current = false;
-        elements.current[activeIndex]?.focus({ preventScroll: true });
-    }, [activeIndex]);
+        elements.current[activeIndexRef.current]?.focus({ preventScroll: true });
+    }, []);
 
     const isLocked = useCallback(() => locked.current, []);
 
@@ -66,6 +79,9 @@ export const KeyboardNavigationProvider: FC<KeyboardNavigationProviderProps> = (
         active.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         active.focus({ preventScroll: true });
 
+        // Reclaim focus when it escapes to <body> during keyboard navigation.
+        // Skipped when locked, since interactive components (e.g. search, dropdowns)
+        // intentionally move focus to their own elements.
         const handleFocusOut = () => {
             if (!locked.current) {
                 requestAnimationFrame(() => {
@@ -89,8 +105,7 @@ export const KeyboardNavigationProvider: FC<KeyboardNavigationProviderProps> = (
                 return;
             }
 
-            const handled = ['Tab', 'ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft', 'Enter', 'Escape'];
-            if (!handled.includes(e.key)) return;
+            if (!HANDLED_KEYS.includes(e.key)) return;
 
             e.preventDefault();
             e.stopImmediatePropagation();
@@ -110,7 +125,7 @@ export const KeyboardNavigationProvider: FC<KeyboardNavigationProviderProps> = (
                     setActiveIndex(prev => Math.max(prev - 1, 0));
                     break;
                 case 'Enter':
-                    elements.current[activeIndex]?.click();
+                    elements.current[activeIndexRef.current]?.click();
                     break;
                 case 'Escape':
                     (document.activeElement as HTMLElement)?.blur();
@@ -120,23 +135,27 @@ export const KeyboardNavigationProvider: FC<KeyboardNavigationProviderProps> = (
 
         window.addEventListener('keydown', handleKeyDown, true);
         return () => window.removeEventListener('keydown', handleKeyDown, true);
-    }, [activeIndex]);
+    }, []);
 
-    const providerValue = useMemo(() =>
-        ({ activeIndex, setActiveIndex, register, lock, unlock, isLocked }),
-        [activeIndex, setActiveIndex, register, lock, unlock, isLocked]);
+    const stableValue = useMemo(() =>
+        ({ register, unregister, lock, unlock, isLocked }),
+        [register, unregister, lock, unlock, isLocked]);
 
     return (
-        <KeyboardNavigationContext.Provider value={providerValue}>
-            {children}
-        </KeyboardNavigationContext.Provider>
+        <StableActionsContext.Provider value={stableValue}>
+            <ActiveIndexContext.Provider value={activeIndex}>
+                {children}
+            </ActiveIndexContext.Provider>
+        </StableActionsContext.Provider>
     );
 };
 
 export const useKeyboardNavigation = () => {
-    const context = useContext(KeyboardNavigationContext);
+    const context = useContext(StableActionsContext);
     if (!context) {
         throw new Error('useKeyboardNavigation must be used within a KeyboardNavigationProvider');
     }
     return context;
 };
+
+export const useActiveIndex = () => useContext(ActiveIndexContext);

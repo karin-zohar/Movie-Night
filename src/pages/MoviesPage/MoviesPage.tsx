@@ -5,12 +5,13 @@ import { useState, type FC } from "react";
 import type { MovieFilter } from "@/types/movie";
 import MovieFilters from "@/components/MovieFilters/MovieFilters";
 
+const { Title } = Typography;
+
 type MoviesPageProps = {
   initialCategory?: MovieFilter["category"];
 };
 
 const MoviesPage: FC<MoviesPageProps> = ({ initialCategory = 'popular' }) => {
-  const { Title } = Typography;
   const [filter, setFilter] = useState<MovieFilter>({ category: initialCategory });
 
   return (

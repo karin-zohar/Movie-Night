@@ -3,8 +3,7 @@ import { MoonIcon, SunIcon } from "@/libs/ui/icons";
 import { useTheme, type Theme } from "@/store";
 import GenSelect from "@/libs/ui/components/GenSelect/GenSelect";
 import { useCallback, useEffect, useState, type ComponentType } from "react";
-import { KeyboardNavigable } from "@/providers/KeyboardNavigation";
-import { useKeyboardNavigation } from "@/providers/KeyboardNavigation";
+import { KeyboardNavigable, useKeyboardNavigation } from "@/providers/KeyboardNavigation";
 
 const themeOptionsData: { value: Theme; icon: ComponentType; label: string }[] = [
     { value: "light", icon: SunIcon, label: "Light Mode" },
@@ -23,11 +22,11 @@ const SelectTheme = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [highlightedIndex, setHighlightedIndex] = useState(0);
 
-    const handleActivate = () => {
+    const handleActivate = useCallback(() => {
         const currentIndex = themeOptionsData.findIndex(o => o.value === theme);
         setHighlightedIndex(currentIndex >= 0 ? currentIndex : 0);
         setDropdownOpen(true);
-    };
+    }, [theme]);
 
     const closeDropdown = useCallback(() => {
         setDropdownOpen(false);
@@ -76,15 +75,7 @@ const SelectTheme = () => {
     useEffect(() => {
         if (!dropdownOpen) return;
 
-        let cancelled = false;
-
-        const updateHighlight = () => {
-            if (cancelled) return;
-            const dropdown = document.querySelector('.ant-select-dropdown');
-            if (!dropdown) {
-                requestAnimationFrame(updateHighlight);
-                return;
-            }
+        const applyHighlight = (dropdown: Element) => {
             const options = dropdown.querySelectorAll('.ant-select-item-option');
             options.forEach((opt, i) => {
                 opt.classList.remove('ant-select-item-option-active');
@@ -92,12 +83,28 @@ const SelectTheme = () => {
             });
         };
 
-        requestAnimationFrame(updateHighlight);
-        return () => { cancelled = true; };
+        // If the dropdown is already in the DOM, highlight immediately
+        const dropdown = document.querySelector('.ant-select-dropdown');
+        if (dropdown) {
+            applyHighlight(dropdown);
+            return;
+        }
+
+        // Otherwise, wait for it to appear
+        const observer = new MutationObserver(() => {
+            const dropdown = document.querySelector('.ant-select-dropdown');
+            if (dropdown) {
+                applyHighlight(dropdown);
+                observer.disconnect();
+            }
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+        return () => observer.disconnect();
     }, [dropdownOpen, highlightedIndex]);
 
     return (
-        <KeyboardNavigable interactive onActivate={handleActivate}>
+        <KeyboardNavigable locksNavOnActivate onActivate={handleActivate}>
             <GenSelect
                 open={dropdownOpen}
                 options={themeOptions}

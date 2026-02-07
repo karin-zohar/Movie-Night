@@ -24,10 +24,6 @@ const NavDrawer: FC<NavDrawerProps> = ({ open, onOpen, onClose }) => {
     lock();
   }, [onOpen, lock]);
 
-  const handleClose = useCallback(() => {
-    onClose();
-  }, [onClose]);
-
   const handleAfterOpenChange = useCallback((isOpen: boolean) => {
     if (!isOpen) {
       unlock();
@@ -53,17 +49,17 @@ const NavDrawer: FC<NavDrawerProps> = ({ open, onOpen, onClose }) => {
         className={clsx("nav-drawer")}
         rootClassName={clsx("theme", theme)}
         open={open}
-        onClose={handleClose}
+        onClose={onClose}
         afterOpenChange={handleAfterOpenChange}
         destroyOnClose
       >
-        <KeyboardNavigationProvider onExit={handleClose} exitKeys={DRAWER_EXIT_KEYS}>
+        <KeyboardNavigationProvider onExit={onClose} exitKeys={DRAWER_EXIT_KEYS}>
           <div className="nav-drawer-close-wrapper">
-            <KeyboardNavigable onActivate={handleClose}>
-              <GenCloseButton onClose={handleClose} size="large" />
+            <KeyboardNavigable onActivate={onClose}>
+              <GenCloseButton onClose={onClose} size="large" />
             </KeyboardNavigable>
           </div>
-          <NavContent layout={"vertical"} closeDrawer={handleClose} />
+          <NavContent layout={"vertical"} closeDrawer={onClose} />
         </KeyboardNavigationProvider>
       </Drawer>
     </>
