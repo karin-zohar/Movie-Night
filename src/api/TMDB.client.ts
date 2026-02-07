@@ -1,4 +1,5 @@
 import { apiRequest } from "./apiService";
+import { waitForRateLimit } from "./rateLimiter";
 
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const READ_ACCESS_TOKEN = import.meta.env.VITE_TMDB_API_READ_ACCESS_TOKEN;
@@ -12,7 +13,8 @@ const getAuthHeaders = (): Record<string, string> => {
 }
 
 export const TMDBClient = {
-  get<TResponse = unknown>(path: string) {
+  async get<TResponse = unknown>(path: string) {
+    await waitForRateLimit("tmdb", 5, 10);
     return apiRequest<TResponse>(
       TMDB_BASE_URL,
       "GET",
