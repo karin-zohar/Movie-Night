@@ -31,7 +31,12 @@ const MoviePage = () => {
 
     const { data: movie, isLoading, error } = useQuery({
         queryKey: ["movie", movieId],
-        queryFn: () => fetchMovie(movieId!),
+        queryFn: () => {
+            if (!movieId) {
+                throw new Error("Missing movie ID")
+            };
+            return fetchMovie(movieId);
+        },
         enabled: !!movieId,
     });
 

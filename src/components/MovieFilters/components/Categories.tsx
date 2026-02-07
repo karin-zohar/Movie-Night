@@ -1,6 +1,8 @@
 import GenRadioButtons from "@/libs/ui/components/GenRadioGroup/GenRadioGroup";
-import type { RadioChangeEvent } from "antd";
+import { Radio, type RadioChangeEvent } from "antd";
 import type { FC } from "react";
+import type { MovieFilter } from "@/types/movie";
+import { KeyboardNavigable } from "@/providers/KeyboardNavigation";
 
 const categoryOptions = [
     { label: "Popular", value: "popular" },
@@ -11,18 +13,32 @@ const categoryOptions = [
 type CategoriesProps = {
     value?: string;
     onChange?: (e: RadioChangeEvent) => void;
+    onSelect?: (value: MovieFilter["category"]) => void;
+    onCategoryFocus?: (value: MovieFilter["category"]) => void;
+    onCategoryBlur?: () => void;
 };
 
-const Categories: FC<CategoriesProps> = ({ value, onChange }) => {
+const Categories: FC<CategoriesProps> = ({ value, onChange, onSelect, onCategoryFocus, onCategoryBlur }) => {
     return (
         <GenRadioButtons
-            className="movie-filters-categories"
-            options={categoryOptions}
             value={value}
             onChange={onChange}
             optionType="button"
             buttonStyle="solid"
-        />
+        >
+            {categoryOptions.map(option => (
+                <KeyboardNavigable
+                    key={option.value}
+                    onActivate={() => onSelect?.(option.value as MovieFilter["category"])}
+                    onFocus={() => onCategoryFocus?.(option.value as MovieFilter["category"])}
+                    onBlur={onCategoryBlur}
+                >
+                    <Radio.Button value={option.value}>
+                        {option.label}
+                    </Radio.Button>
+                </KeyboardNavigable>
+            ))}
+        </GenRadioButtons>
     );
 };
 

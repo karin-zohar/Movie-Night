@@ -1,6 +1,6 @@
 import type { MovieFilter } from "@/types/movie";
 import { Form } from "antd";
-import { type Dispatch, type FC, type SetStateAction, useCallback } from "react";
+import { type Dispatch, type FC, type SetStateAction, useCallback, useEffect, useRef } from "react";
 import { debounce } from "es-toolkit";
 import SearchBar from "./components/SearchBar";
 import Categories from "./components/Categories";
@@ -13,9 +13,15 @@ type MovieFiltersProps = {
 
 const MIN_SEARCH_LENGTH = 2
 const DEFAULT_CATEGORY: MovieFilter["category"] = "popular"
+const FOCUS_DELAY_MS = 2000
 
 const MovieFilters: FC<MovieFiltersProps> = ({ setFilter, initialCategory = DEFAULT_CATEGORY }) => {
     const [form] = Form.useForm<MovieFilter>();
+    const focusTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+    useEffect(() => {
+        return () => clearTimeout(focusTimerRef.current);
+    }, []);
 
     const debouncedSetSearch = useCallback(
         debounce((search: string) => {
@@ -31,10 +37,33 @@ const MovieFilters: FC<MovieFiltersProps> = ({ setFilter, initialCategory = DEFA
         [setFilter, form]
     );
 
+    const handleCategorySelect = useCallback((category: MovieFilter["category"]) => {
+        clearTimeout(focusTimerRef.current);
+        debouncedSetSearch.cancel();
+        form.setFieldsValue({ category, search: "" });
+        setFilter({ category });
+    }, [form, debouncedSetSearch, setFilter]);
+
+    const handleCategoryFocus = useCallback((category: MovieFilter["category"]) => {
+        clearTimeout(focusTimerRef.current);
+
+        const currentCategory = form.getFieldValue("category");
+        if (category === currentCategory) return;
+
+        focusTimerRef.current = setTimeout(() => {
+            handleCategorySelect(category);
+        }, FOCUS_DELAY_MS);
+    }, [form, handleCategorySelect]);
+
+    const handleCategoryBlur = useCallback(() => {
+        clearTimeout(focusTimerRef.current);
+    }, []);
+
     const onValuesChange = useCallback((changedValues: Partial<MovieFilter>) => {
         const { search, category } = changedValues;
 
         if (search !== undefined) {
+            clearTimeout(focusTimerRef.current);
             const trimmed = search.trim();
 
             if (trimmed.length >= MIN_SEARCH_LENGTH) {
@@ -47,11 +76,9 @@ const MovieFilters: FC<MovieFiltersProps> = ({ setFilter, initialCategory = DEFA
         }
 
         if (category !== undefined) {
-            debouncedSetSearch.cancel();
-            form.setFieldsValue({ search: "" });
-            setFilter({ category });
+            handleCategorySelect(category);
         }
-    }, [form, debouncedSetSearch, setFilter]);
+    }, [form, debouncedSetSearch, setFilter, handleCategorySelect]);
 
     return (
         <div className="movie-filters">
@@ -63,7 +90,11 @@ const MovieFilters: FC<MovieFiltersProps> = ({ setFilter, initialCategory = DEFA
                     <SearchBar />
                 </Form.Item>
                 <Form.Item name="category" initialValue={initialCategory}>
-                    <Categories />
+                    <Categories
+                        onSelect={handleCategorySelect}
+                        onCategoryFocus={handleCategoryFocus}
+                        onCategoryBlur={handleCategoryBlur}
+                    />
                 </Form.Item>
             </Form>
         </div>
