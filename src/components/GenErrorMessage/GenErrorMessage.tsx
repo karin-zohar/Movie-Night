@@ -25,7 +25,6 @@ const GenErrorMessage: FC<GenErrorMessageProps> = ({ error }) => {
 
   return (
     <Flex vertical align="center" justify="center" gap={20} >
-
       <Text type="danger">
         {(error.status && STATUS_MESSAGES[error.status]) || DEFAULT_MESSAGE}
       </Text>

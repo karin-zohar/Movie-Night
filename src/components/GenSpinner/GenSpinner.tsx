@@ -1,8 +1,8 @@
 import type { FC } from "react";
 import { Spin } from "antd";
 import Icon from "@ant-design/icons";
-import './gen-spinner.style.css';
 import { SpinnerIcon } from "@/libs/ui/icons";
+import './gen-spinner.style.css';
 
 type GenSpinnerProps = {
   size?: "small" | "default" | "large";

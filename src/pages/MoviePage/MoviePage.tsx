@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import type { Movie, TMDBMovieResponse } from "@/types/movie";
 import { useParams } from "react-router";
+import { TMDBClient, TMDB_IMAGE_BASE_URL } from "@/api/TMDB.client";
 import MovieDetails from "./components/MovieDetails/MovieDetails";
 import MovieActions from "./components/MovieActions/MovieActions";
-import { Flex } from "antd";
-import { TMDBClient, TMDB_IMAGE_BASE_URL } from "@/api/TMDB.client";
+import type { Movie, TMDBMovieResponse } from "@/types/movie";
 import GenSpinner from "@/components/GenSpinner/GenSpinner";
 import GenErrorMessage from "@/components/GenErrorMessage/GenErrorMessage";
+import { Flex } from "antd";
 import './movie-page.style.css';
 
 const fetchMovie = async (movieId: string): Promise<Movie> => {
@@ -30,8 +30,8 @@ const MoviePage = () => {
         enabled: !!movieId,
     });
 
-    if (isLoading) return <GenSpinner />;
-    if (error) return <GenErrorMessage error={error} />;
+    if (isLoading) { return <GenSpinner /> };
+    if (error) { return <GenErrorMessage error={error} /> };
 
     return (
         <Flex className="movie-page">

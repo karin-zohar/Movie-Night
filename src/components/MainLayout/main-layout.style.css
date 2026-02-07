@@ -5,11 +5,11 @@
   height: 100vh;
 
   main {
-    flex: 1;
     height: 100%;
+    padding-block: 30px;
+    flex: 1;
     overflow: hidden;
     display: grid;
-    padding-block: 30px;
     grid-template-columns:
       minmax(60px, 1fr) minmax(250px, 100%) minmax(60px, 1fr);
 

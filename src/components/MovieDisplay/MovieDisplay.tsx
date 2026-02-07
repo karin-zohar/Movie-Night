@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import type { Movie, TMDBMovieListResponse } from "../../types/movie";
+import type { Movie, TMDBMovieListResponse } from "@/types/movie";
 import { TMDBClient, TMDB_IMAGE_BASE_URL } from "@/api/TMDB.client";
 import GenSpinner from "@/components/GenSpinner/GenSpinner";
 import GenErrorMessage from "@/components/GenErrorMessage/GenErrorMessage";
@@ -24,8 +24,8 @@ const MovieDisplay = () => {
     queryFn: fetchMovies,
   });
 
-  if (isLoading) return <GenSpinner />;
-  if (error) return <GenErrorMessage error={error} />;
+  if (isLoading) { return <GenSpinner /> };
+  if (error) { return <GenErrorMessage error={error} /> };
 
   return (
     <div className="movie-display">
