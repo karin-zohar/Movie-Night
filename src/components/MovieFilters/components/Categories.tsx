@@ -14,9 +14,11 @@ type CategoriesProps = {
     value?: string;
     onChange?: (e: RadioChangeEvent) => void;
     onSelect?: (value: MovieFilter["category"]) => void;
+    onCategoryFocus?: (value: MovieFilter["category"]) => void;
+    onCategoryBlur?: () => void;
 };
 
-const Categories: FC<CategoriesProps> = ({ value, onChange, onSelect }) => {
+const Categories: FC<CategoriesProps> = ({ value, onChange, onSelect, onCategoryFocus, onCategoryBlur }) => {
     return (
         <GenRadioButtons
             value={value}
@@ -28,6 +30,8 @@ const Categories: FC<CategoriesProps> = ({ value, onChange, onSelect }) => {
                 <KeyboardNavigable
                     key={option.value}
                     onActivate={() => onSelect?.(option.value as MovieFilter["category"])}
+                    onFocus={() => onCategoryFocus?.(option.value as MovieFilter["category"])}
+                    onBlur={onCategoryBlur}
                 >
                     <Radio.Button value={option.value}>
                         {option.label}
