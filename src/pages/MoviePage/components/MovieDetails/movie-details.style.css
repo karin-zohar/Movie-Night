@@ -41,7 +41,6 @@
 
     .movie-details-text-wrapper {
       >* {
-        border: 1px solid red;
         -webkit-line-clamp: none;
         line-clamp: none;
         overflow: visible;
