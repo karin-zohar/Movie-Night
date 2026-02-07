@@ -5,6 +5,7 @@ import { store } from "./store";
 import MainLayout from "./components/MainLayout/MainLayout";
 import routes from "./router/routes";
 import { ToastProvider } from "./providers/Toast";
+import { KeyboardNavigationProvider } from "./providers/KeyboardNavigation";
 
 const queryClient = new QueryClient();
 
@@ -17,11 +18,13 @@ function App() {
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <Router>
-          <ToastProvider>
-            <MainLayout>
-              <AppRoutes />
-            </MainLayout>
-          </ToastProvider>
+          <KeyboardNavigationProvider>
+            <ToastProvider>
+              <MainLayout>
+                <AppRoutes />
+              </MainLayout>
+            </ToastProvider>
+          </KeyboardNavigationProvider>
         </Router>
       </QueryClientProvider>
     </Provider>

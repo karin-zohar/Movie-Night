@@ -2,6 +2,7 @@ import type { FC } from "react";
 import { HeartFilledIcon, HomeIcon } from "@/libs/ui/icons";
 import { Menu, type MenuProps } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
+import { KeyboardNavigable } from "@/providers/KeyboardNavigation";
 
 type NavMenuProps = {
   layout: "horizontal" | "vertical";
@@ -16,12 +17,12 @@ const NavMenu: FC<NavMenuProps> = ({ layout, closeDrawer }) => {
 
   const menuItems: MenuItem[] = [
     {
-      label: "Home",
+      label: <KeyboardNavigable targetSelector="li">Home</KeyboardNavigable>,
       key: "/",
       icon: <HomeIcon />,
     },
     {
-      label: "My Favorites",
+      label: <KeyboardNavigable targetSelector="li">My Favorites</KeyboardNavigable>,
       key: "/my-favorites",
       icon: <HeartFilledIcon />,
     },
