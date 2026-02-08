@@ -19,7 +19,6 @@ interface StableActionsContextType {
 }
 
 const StableActionsContext = createContext<StableActionsContextType | null>(null);
-const ActiveIndexContext = createContext<number>(0);
 
 const HANDLED_KEYS = ['Tab', 'ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft', 'Enter', 'Escape'];
 
@@ -137,15 +136,22 @@ export const KeyboardNavigationProvider: FC<KeyboardNavigationProviderProps> = (
         return () => window.removeEventListener('keydown', handleKeyDown, true);
     }, []);
 
+    useEffect(() => {
+        const preventWheel = (e: WheelEvent) => {
+            e.preventDefault();
+        };
+
+        window.addEventListener('wheel', preventWheel, { passive: false });
+        return () => window.removeEventListener('wheel', preventWheel);
+    }, []);
+
     const stableValue = useMemo(() =>
         ({ register, unregister, lock, unlock, isLocked }),
         [register, unregister, lock, unlock, isLocked]);
 
     return (
         <StableActionsContext.Provider value={stableValue}>
-            <ActiveIndexContext.Provider value={activeIndex}>
-                {children}
-            </ActiveIndexContext.Provider>
+            {children}
         </StableActionsContext.Provider>
     );
 };
@@ -157,5 +163,3 @@ export const useKeyboardNavigation = () => {
     }
     return context;
 };
-
-export const useActiveIndex = () => useContext(ActiveIndexContext);

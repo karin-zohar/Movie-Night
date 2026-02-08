@@ -19,7 +19,7 @@ const MovieDetails: FC<MovieDetailsProps> = ({ movie }) => {
   return (
     <div className="movie-details">
       <div className="movie-details-image-wrapper">
-        <img src={imageUrl} alt={title} />
+        <img src={imageUrl} alt={title} loading="lazy" />
       </div>
 
       <div className="movie-details-text-wrapper">

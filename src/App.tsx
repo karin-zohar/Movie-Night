@@ -4,7 +4,6 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 import MainLayout from "./components/MainLayout/MainLayout";
 import routes from "./router/routes";
-import { ToastProvider } from "./providers/Toast";
 import { KeyboardNavigationProvider } from "./providers/KeyboardNavigation";
 
 const queryClient = new QueryClient();
@@ -19,11 +18,9 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <Router>
           <KeyboardNavigationProvider>
-            <ToastProvider>
-              <MainLayout>
-                <AppRoutes />
-              </MainLayout>
-            </ToastProvider>
+            <MainLayout>
+              <AppRoutes />
+            </MainLayout>
           </KeyboardNavigationProvider>
         </Router>
       </QueryClientProvider>
