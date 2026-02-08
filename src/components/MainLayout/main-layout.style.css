@@ -21,7 +21,7 @@
 
       &::-webkit-scrollbar {
         pointer-events: none;
-        pointer-events: none;
+        -ms-overflow-style: none;
         display: none;
       }
 

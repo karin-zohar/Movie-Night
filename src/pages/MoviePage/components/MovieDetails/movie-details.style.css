@@ -1,5 +1,6 @@
 .movie-details {
   max-height: 100%;
+  max-width: 950px;
   min-height: 0;
   display: flex;
   flex-direction: column;

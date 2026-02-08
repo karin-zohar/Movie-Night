@@ -29,7 +29,7 @@ const MoviePreview: FC<MoviePreviewProps> = ({ movie }) => {
     <Link to={`/movie/${id}`} className="movie-preview-link" ref={linkRef}>
       <div className="movie-preview">
         <div className="movie-preview-image-wrapper">
-          <img src={imageUrl} alt={title} />
+          <img src={imageUrl} alt={title} loading="lazy" />
         </div>
 
         <div className="movie-preview-text-wrapper">
