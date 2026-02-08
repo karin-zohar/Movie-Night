@@ -29,8 +29,6 @@ const KeyboardNavigable: FC<KeyboardNavigableProps> = ({ children, targetSelecto
 		[register, unregister, targetSelector]
 	);
 
-	// Ignores clicks on child elements (e.g. Buttons) so they keep their own behavior.
-	// Only reacts to clicks directly on the wrapper (triggered by keyboard Enter).
 	const handleClick = useCallback((e: MouseEvent<HTMLDivElement>) => {
 		if (e.target !== e.currentTarget) return;
 
@@ -38,8 +36,6 @@ const KeyboardNavigable: FC<KeyboardNavigableProps> = ({ children, targetSelecto
 		onActivate?.();
 	}, [locksNavOnActivate, lock, onActivate]);
 
-	// Only fires for direct focus/blur on the wrapper (keyboard navigation),
-	// not for bubbled events from child elements (e.g. mouse click on Radio.Button).
 	const handleFocus = useCallback((e: FocusEvent<HTMLDivElement>) => {
 		if (e.target !== e.currentTarget) return;
 		onFocus?.();
