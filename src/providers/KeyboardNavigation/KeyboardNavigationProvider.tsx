@@ -137,6 +137,15 @@ export const KeyboardNavigationProvider: FC<KeyboardNavigationProviderProps> = (
         return () => window.removeEventListener('keydown', handleKeyDown, true);
     }, []);
 
+    useEffect(() => {
+        const preventWheel = (e: WheelEvent) => {
+            e.preventDefault();
+
+        };
+        window.addEventListener('wheel', preventWheel, { passive: false });
+        return () => window.removeEventListener('wheel', preventWheel);
+    }, []);
+
     const stableValue = useMemo(() =>
         ({ register, unregister, lock, unlock, isLocked }),
         [register, unregister, lock, unlock, isLocked]);
